@@ -40,3 +40,14 @@ serviceAccountKey.json
 
 # Docker
 *.pid
+
+# Package lock files (regenerated on npm install)
+package-lock.json
+
+# Coverage / test output
+coverage/
+.nyc_output/
+
+# Misc
+*.tgz
+.eslintcache

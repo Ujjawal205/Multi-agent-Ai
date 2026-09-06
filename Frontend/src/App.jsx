@@ -1,15 +1,28 @@
 
-import { signInWithPopup } from 'firebase/auth'
-import { auth, googleProvider } from '../utils/firebase'
-import api from '../utils/axios'
 import Home from './pages/Home'
+import { useEffect } from 'react'
+import getCurrentUser from './features/getCurrentUser'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUserData } from './redux/userSlice'
+
 
 function App() {
+
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.user.userData)
+
+  useEffect(() => {
+    const getUser = async () => {
+      const data = await getCurrentUser()
+      dispatch(setUserData(data))
+    }
+    getUser()
+  }, [])
 
 
   return (
     <>
-    <Home />
+    <Home user={user} onLogin={(data) => dispatch(setUserData(data))} />
     </>
     
   )

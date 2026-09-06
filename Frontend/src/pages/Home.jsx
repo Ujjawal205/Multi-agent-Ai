@@ -1,15 +1,18 @@
-import React from 'react'
 import { signInWithPopup } from 'firebase/auth'
 import api from '../../utils/axios'
 import { auth, googleProvider } from '../../utils/firebase'
 import { FcGoogle } from "react-icons/fc";
+import { useSelector } from 'react-redux'
 
 
-function Home() {
+function Home({ user, onLogin }) {
+    const { userData } = useSelector((state) => state.user)
+    console.log("User data from redux:", userData)
     const handlleGoogleSignIn = async (token) => {
         try {
-            const { data } = await api.post('/auth/login', { token })
+            const { data } = await api.post("/auth/login", { token })
             console.log(data)
+            onLogin(data)
         } catch (error) {
             console.log(error);
         }
@@ -28,7 +31,7 @@ function Home() {
     }
     return (
         <div className='w-full h-screen bg-[#0d0f14] text-white flex overflow-hidden'>
-            <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm '>
+            {user ? <p className='m-auto'>Welcome, {user.name}</p> : <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm '>
                 <div className='w-[340px] bg-[#13151c] border border-white/[0.08] rounded-2x1 p-8 flex flex-col gap-5'>
                     <div className='flex flex-col gap-1'>
                         <h1 className='text-[17px] font-semibold text-slate-100 tracking-tight'>Welcome to Multi-Agent AI</h1>
@@ -43,7 +46,7 @@ function Home() {
 
                 </div>
 
-            </div>
+            </div>}
 
         </div>
     )
