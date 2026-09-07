@@ -6,13 +6,13 @@ const conversationSchema = new mongoose.Schema({
         default: "New Chat",
     },
     userId: {
-        type: string
+        type: String
     }
 },{
     timestamps : true
 });
 
-const conversation = mongoose.Model("Conversation", "conversationSchema")
+const conversation = mongoose.model("Conversation", conversationSchema)
 export default conversation
 
     

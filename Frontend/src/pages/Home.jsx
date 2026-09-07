@@ -3,6 +3,9 @@ import api from '../../utils/axios'
 import { auth, googleProvider } from '../../utils/firebase'
 import { FcGoogle } from "react-icons/fc";
 import { useSelector } from 'react-redux'
+import SideBar from '../components/SideBar';
+import ChatArea from '../components/ChatArea';
+import Artifact from '../components/Artifact';
 
 
 function Home({ user, onLogin }) {
@@ -31,7 +34,10 @@ function Home({ user, onLogin }) {
     }
     return (
         <div className='w-full h-screen bg-[#0d0f14] text-white flex overflow-hidden'>
-            {user ? <p className='m-auto'>Welcome, {user.name}</p> : <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm '>
+            <SideBar/>
+            <ChatArea/>
+            <Artifact/>
+            {!user && <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm '>
                 <div className='w-[340px] bg-[#13151c] border border-white/[0.08] rounded-2x1 p-8 flex flex-col gap-5'>
                     <div className='flex flex-col gap-1'>
                         <h1 className='text-[17px] font-semibold text-slate-100 tracking-tight'>Welcome to Multi-Agent AI</h1>
@@ -49,6 +55,7 @@ function Home({ user, onLogin }) {
             </div>}
 
         </div>
+        
     )
 }
 
