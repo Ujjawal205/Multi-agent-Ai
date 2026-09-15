@@ -8,7 +8,7 @@ export const createConversation = async (req, res) => {
         const Conversation = await conversation.create({
             userId:userId 
         })
-        return res.status(200).json(conversation)
+        return res.status(200).json(Conversation)
 
     } catch(error) {
         return res.status(500).json({Message : `create conversation error ${error}`})
@@ -23,7 +23,7 @@ export const createConversation = async (req, res) => {
         const Conversation = await conversation.find({
             userId:userId 
         }).sort({updatedAt: -1})
-        return res.status(200).json(conversations)
+        return res.status(200).json(Conversation)
 
     } catch(error) {
         return res.status(500).json({Message : `get conversation error ${error}`})
@@ -67,8 +67,8 @@ export const getMessages = async (req,res) => {
         try {
             const message =  await Message.find({
                 conversationId: req.params.conversationId
-            }).sort({createdAt: -1})
-            return res.status(200).json(messages)
+            })
+            return res.status(200).json(message)
 
         } catch (error) {
             return res.status(500).json({Message : `get messages error ${error}`})

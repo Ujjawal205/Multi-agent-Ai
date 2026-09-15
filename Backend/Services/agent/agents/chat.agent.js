@@ -1,19 +1,50 @@
+import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages"
 import { getModel } from "../config/llmModels.js"
+import { getMemory } from "../config/memory.js"
 
 export const chatAgent = async (state) => {
     const llm = await getModel("chat")
-    const Systemprompt = "You are Multi-agent Ai, an intelligent AI assistant."
 
-    const response = await llm.invoke([
-        {
-            "role" : "system",
-            "content" : Systemprompt
-        },
-        {
-            "role" : "human",
-            "content" : state.prompt 
+    const history = await getMemory(state.conversationId)
+
+  
+    const Systemprompt = `
+    You're a Multi-agent AI, an intelligent AI assistant.
+    
+    Rules :
+    -For simple questions, greetings, and short queries, respond naturally in plain text.
+    -For technical, education, coding, or detailed topic, use clean Markdown.
+    
+    
+    Formatting:
+    
+    -Use # for titles and ## for sections.
+    -leave a blank line after headings.
+    -Use bullet points for lists.
+    -Use numbered list for steps.
+    -Use fenced code blocks with language tags for codes.
+    -Keep paragraphs short and readable.
+    -Never write headings and content in the same line.
+    -Never generate large walls of text.
+    `
+
+      const messages = [
+        new SystemMessage(Systemprompt)
+      ]
+
+      history.forEach(msg => {
+        if(msg.role=="user"){
+            messages.push(new HumanMessage(msg.content))
         }
-    ])
+        if(msg.role=="assistant"){
+            messages.push(new AIMessage(msg.content))
+        }
+      });
+
+      messages.push(new HumanMessage(state.prompt))
+      console.log(messages)
+
+    const response = await llm.invoke(messages)
 
     return{
         ...state,
